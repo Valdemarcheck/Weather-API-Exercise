@@ -1,0 +1,20 @@
+{
+  "name": "weather-api-exercise",
+  "version": "1.0.0",
+  "description": "This is my implementation of Weather API exercise from The Odin Project curriculum (JS path). It showcases my basic knowledge of promises and async / await syntax",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "webpack",
+    "run": "webpack && webpack serve --open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
