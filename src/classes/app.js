@@ -1,8 +1,13 @@
 import TextTranslator from "./textTranslator";
 import LocalStorageManager from "./localStorageManager";
 import InputGetter from "./inputGetter";
+import URLMaker from "./URLMaker";
 
 export default class App {
+  URL_TYPES = {
+    current: "/current.json",
+    forecast: "/forecast.json",
+  };
   TEXT_TRANSLATIONS = {
     "form#settings>.header": {
       ru: "Настройки",
@@ -39,11 +44,13 @@ export default class App {
   setup() {
     const languageSelect = document.getElementById("language");
     const submitButton = document.querySelector("button[type='submit']");
+    const weatherForm = document.getElementById("weather-form");
     const inputs = [languageSelect, document.getElementById("location")];
 
     const localStorageManager = new LocalStorageManager();
     const textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
     const inputGetter = new InputGetter();
+    const urlMaker = new URLMaker();
 
     if (localStorageManager.getValue("language")) {
       const language = localStorageManager.getValue("language");
@@ -57,9 +64,17 @@ export default class App {
     });
 
     submitButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      const inputValues = inputGetter.getURLInputValues(inputs);
-      console.log(inputValues);
+      if (weatherForm.checkValidity()) {
+        e.preventDefault();
+        const inputValues = inputGetter.getURLInputValues(inputs);
+        console.log(inputValues);
+
+        const currentWeatherURL = urlMaker.makeURL(
+          inputValues,
+          this.URL_TYPES.current
+        );
+        console.log(currentWeatherURL);
+      }
     });
   }
 }
