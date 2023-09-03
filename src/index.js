@@ -1,7 +1,7 @@
 import "./styles.css";
+import App from "./app";
 
-class Hello extends Array {
-  constructor(name) {
-    this.name = name;
-  }
-}
+(() => {
+  const app = new App();
+  app.setup();
+})();
