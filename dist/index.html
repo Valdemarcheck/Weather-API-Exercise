@@ -7,5 +7,52 @@
     <script src="./main.js" defer></script>
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <form id="settings">
+      <h2>Settings</h2>
+      <div class="row">
+        <label for="language">Language</label>
+        <select name="language" id="language">
+          <option value="en" selected>English</option>
+          <option value="ru">Russian</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="speed">Air speed</label>
+        <select name="speed" id="speed">
+          <option value="kph" selected>Kilometers per hour</option>
+          <option value="mps">Meters per second</option>
+          <option value="mph">Miles per hour</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="temperature">Temperature</label>
+        <select name="temperature" id="temperature">
+          <option value="temp_c" selected>Celsius</option>
+          <option value="temp_f">Fahrenheit</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="pressure">Pressure</label>
+        <select name="pressure" id="pressure">
+          <option value="pressure_mb" selected>Millibars</option>
+          <option value="pressure_in">Inches</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="precipitation">Precipitation</label>
+        <select name="precipitation" id="precipitation">
+          <option value="precip_mm" selected>Millimeters</option>
+          <option value="precip_in">Inches</option>
+        </select>
+      </div>
+    </form>
+    <form id="weather-form">
+      <label for="location">City or country</label>
+      <input type="text" id="location" placeholder="Los-Angeles" />
+      <button type="submit">Get weather</button>
+    </form>
+    <div id="current-forecast-div"></div>
+    <div id="weekly-forecast-div"></div>
+  </body>
 </html>
