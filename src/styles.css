@@ -51,3 +51,22 @@ footer {
   align-items: center;
   padding-left: 10px;
 }
+
+#error-notification {
+  color: black;
+  background-color: white;
+  width: 200px;
+  padding: 10px;
+  border-bottom: 3px solid rgb(255, 78, 78);
+
+  position: absolute;
+  top: 0;
+}
+
+#error-notification p {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}

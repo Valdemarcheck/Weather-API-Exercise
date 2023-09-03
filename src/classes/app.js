@@ -2,6 +2,9 @@ import TextTranslator from "./textTranslator";
 import LocalStorageManager from "./localStorageManager";
 import InputGetter from "./inputGetter";
 import URLMaker from "./URLMaker";
+import DataFetcher from "./dataFetcher";
+import ErrorNotifier from "./errorNotifier";
+import JsonParser from "./jsonParser";
 
 export default class App {
   URL_TYPES = {
@@ -45,12 +48,17 @@ export default class App {
     const languageSelect = document.getElementById("language");
     const submitButton = document.querySelector("button[type='submit']");
     const weatherForm = document.getElementById("weather-form");
+    const errorNotificationElement =
+      document.getElementById("error-notification");
     const inputs = [languageSelect, document.getElementById("location")];
 
     const localStorageManager = new LocalStorageManager();
     const textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
     const inputGetter = new InputGetter();
     const urlMaker = new URLMaker();
+    const dataFetcher = new DataFetcher();
+    const errorNotifier = new ErrorNotifier(errorNotificationElement);
+    const jsonParser = new JsonParser();
 
     if (localStorageManager.getValue("language")) {
       const language = localStorageManager.getValue("language");
@@ -74,6 +82,13 @@ export default class App {
           this.URL_TYPES.current
         );
         console.log(currentWeatherURL);
+
+        try {
+          const response = dataFetcher.fetchData(currentWeatherURL);
+          const data = jsonParser.parseJson(response);
+        } catch (err) {
+          errorNotifier.notifyError(errorNotificationElement, err);
+        }
       }
     });
   }
