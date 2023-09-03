@@ -1,5 +1,6 @@
 import TextTranslator from "./textTranslator";
 import LocalStorageManager from "./localStorageManager";
+import InputGetter from "./inputGetter";
 
 export default class App {
   TEXT_TRANSLATIONS = {
@@ -36,10 +37,13 @@ export default class App {
   constructor() {}
 
   setup() {
-    const localStorageManager = new LocalStorageManager();
-    const textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS);
-
     const languageSelect = document.getElementById("language");
+    const submitButton = document.querySelector("button[type='submit']");
+    const inputs = [languageSelect, document.getElementById("location")];
+
+    const localStorageManager = new LocalStorageManager();
+    const textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
+    const inputGetter = new InputGetter();
 
     if (localStorageManager.getValue("language")) {
       const language = localStorageManager.getValue("language");
@@ -50,6 +54,12 @@ export default class App {
     languageSelect.addEventListener("change", () => {
       textTranslator.translateText(languageSelect.value);
       localStorageManager.setValue("language", languageSelect.value);
+    });
+
+    submitButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      const inputValues = inputGetter.getURLInputValues(inputs);
+      console.log(inputValues);
     });
   }
 }

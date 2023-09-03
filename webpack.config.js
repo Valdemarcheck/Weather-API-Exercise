@@ -21,7 +21,7 @@ module.exports = {
       },
     ],
   },
-  devtool: "eval",
+  devtool: "source-map",
   devServer: {
     static: "./dist",
   },

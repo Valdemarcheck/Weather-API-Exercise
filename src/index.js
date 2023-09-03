@@ -1,5 +1,5 @@
 import "./styles.css";
-import App from "./app";
+import App from "./classes/app";
 
 (() => {
   const app = new App();
