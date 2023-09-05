@@ -8,7 +8,7 @@ export default class URLMaker {
     const location = inputValues.location;
     const language = inputValues.language;
 
-    const URLPath = `http://api.weatherapi.com/v1${URLType}`;
+    const URLPath = `https://api.weatherapi.com/v1${URLType}`;
     let URLParameters = `key=${key}&q=${location}`;
     if (language !== "en") {
       URLParameters += `&lang=${language}`;

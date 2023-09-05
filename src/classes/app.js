@@ -57,7 +57,7 @@ export default class App {
     const inputGetter = new InputGetter();
     const urlMaker = new URLMaker();
     const dataFetcher = new DataFetcher();
-    const errorNotifier = new ErrorNotifier(errorNotificationElement);
+    const errorNotifier = new ErrorNotifier();
     const jsonParser = new JsonParser();
 
     if (localStorageManager.getValue("language")) {
@@ -71,7 +71,7 @@ export default class App {
       localStorageManager.setValue("language", languageSelect.value);
     });
 
-    submitButton.addEventListener("click", (e) => {
+    submitButton.addEventListener("click", async (e) => {
       if (weatherForm.checkValidity()) {
         e.preventDefault();
         const inputValues = inputGetter.getURLInputValues(inputs);
@@ -83,12 +83,10 @@ export default class App {
         );
         console.log(currentWeatherURL);
 
-        try {
-          const response = dataFetcher.fetchData(currentWeatherURL);
-          const data = jsonParser.parseJson(response);
-        } catch (err) {
-          errorNotifier.notifyError(errorNotificationElement, err);
-        }
+        const response = await dataFetcher.fetchData(currentWeatherURL);
+        console.log(response);
+        const data = await jsonParser.parseJson(response);
+        console.log(data);
       }
     });
   }
