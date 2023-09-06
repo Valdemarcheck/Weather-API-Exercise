@@ -5,8 +5,13 @@ import URLMaker from "./URLMaker";
 import DataFetcher from "./dataFetcher";
 import ErrorNotifier from "./errorNotifier";
 import JsonParser from "./jsonParser";
+import DataRenderer from "./dataRenderer";
 
 export default class App {
+  OBJECTS_TO_RENDER_INSIDE_OF = [
+    document.getElementById("current-forecast-div"),
+    document.getElementById("weekly-forecast-div"),
+  ];
   URL_TYPES = {
     current: "/current.json",
     forecast: "/forecast.json",
@@ -50,6 +55,7 @@ export default class App {
     this.dataFetcher = new DataFetcher();
     this.errorNotifier = new ErrorNotifier();
     this.jsonParser = new JsonParser();
+    this.dataRenderer = new DataRenderer(this.OBJECTS_TO_RENDER_INSIDE_OF);
   }
 
   async getDataOfURLType(inputValues, URLType) {
@@ -64,8 +70,6 @@ export default class App {
     const languageSelect = document.getElementById("language");
     const submitButton = document.querySelector("button[type='submit']");
     const weatherForm = document.getElementById("weather-form");
-    const errorNotificationElement =
-      document.getElementById("error-notification");
     const inputs = [languageSelect, document.getElementById("location")];
 
     if (this.localStorageManager.getValue("language")) {
@@ -83,7 +87,6 @@ export default class App {
       if (weatherForm.checkValidity()) {
         e.preventDefault();
         const inputValues = this.inputGetter.getURLInputValues(inputs);
-        console.log(inputValues);
 
         const currentWeatherData = await this.getDataOfURLType(
           inputValues,
