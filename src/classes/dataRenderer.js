@@ -1,6 +1,6 @@
 export default class DataRenderer {
-  constructor(objectsToRenderInsideOf) {
-    this._objectsToRenderInsideOf = objectsToRenderInsideOf;
+  constructor(DOMElementsToHandleOnRender) {
+    this._DOMElementsToHandleOnRender = DOMElementsToHandleOnRender;
   }
 
   renderWeather(data) {
@@ -9,7 +9,7 @@ export default class DataRenderer {
   }
 
   #renderCurrentWeather(data) {
-    const currentWeatherDiv = this._objectsToRenderInsideOf.current;
+    const currentWeatherDiv = this._DOMElementsToHandleOnRender.current;
     const header = document.createElement("h2");
     header.textContent = "Current weather";
     currentWeatherDiv.appendChild(header);
@@ -25,7 +25,7 @@ export default class DataRenderer {
   }
 
   #renderForecastWeather(daysData) {
-    const forecastWeatherDiv = this._objectsToRenderInsideOf.forecast;
+    const forecastWeatherDiv = this._DOMElementsToHandleOnRender.forecast;
 
     const header = document.createElement("h2");
     header.textContent = "Weekly forecast";

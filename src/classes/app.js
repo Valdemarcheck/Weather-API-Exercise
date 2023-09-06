@@ -7,6 +7,7 @@ import ErrorNotifier from "./errorNotifier";
 import JsonParser from "./jsonParser";
 import DataRenderer from "./dataRenderer";
 import RequiredDataGetter from "./requiredDataGetter";
+import DataUnrenderer from "./dataUnrenderer";
 
 const URL_TYPES = {
   current: "/current.json",
@@ -44,7 +45,7 @@ const STATIC_TEXT_TRANSLATIONS = {
 };
 export default class App {
   constructor() {
-    const objectsToRenderInsideOf = {
+    const DOMElementsToHandleOnRender = {
       current: document.getElementById("current-forecast-div"),
       forecast: document.getElementById("weekly-forecast-div"),
     };
@@ -56,8 +57,9 @@ export default class App {
     this.dataFetcher = new DataFetcher();
     this.errorNotifier = new ErrorNotifier();
     this.jsonParser = new JsonParser();
-    this.dataRenderer = new DataRenderer(objectsToRenderInsideOf);
+    this.dataRenderer = new DataRenderer(DOMElementsToHandleOnRender);
     this.requiredDataGetter = new RequiredDataGetter();
+    this.dataUnrenderer = new DataUnrenderer(DOMElementsToHandleOnRender);
   }
 
   async getWeatherData(inputValues) {
@@ -107,6 +109,7 @@ export default class App {
           renderingParameters,
         });
 
+        this.dataUnrenderer.unrender();
         this.dataRenderer.renderWeather(requiredData);
       }
     });
