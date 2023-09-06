@@ -12,7 +12,7 @@ const URL_TYPES = {
   current: "/current.json",
   forecast: "/forecast.json",
 };
-const TEXT_TRANSLATIONS = {
+const STATIC_TEXT_TRANSLATIONS = {
   "form#settings>.header": {
     ru: "Настройки",
     en: "Settings",
@@ -50,7 +50,7 @@ export default class App {
     };
 
     this.localStorageManager = new LocalStorageManager();
-    this.textTranslator = new TextTranslator(TEXT_TRANSLATIONS, null);
+    this.textTranslator = new TextTranslator(STATIC_TEXT_TRANSLATIONS, null);
     this.inputGetter = new InputGetter();
     this.urlMaker = new URLMaker(URL_TYPES);
     this.dataFetcher = new DataFetcher();
@@ -107,10 +107,7 @@ export default class App {
           renderingParameters,
         });
 
-        this.dataRenderer.renderWeather({
-          data: requiredData,
-          renderingParameters,
-        });
+        this.dataRenderer.renderWeather(requiredData);
       }
     });
   }
