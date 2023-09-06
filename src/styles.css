@@ -142,8 +142,17 @@ footer {
 
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 20px;
   margin-bottom: -10px;
+}
+
+#github-link {
+  display: block;
+  height: 70%;
+  aspect-ratio: 1/1;
+  background: url("./images/github-logo-white-96.png");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 #error-notification {
