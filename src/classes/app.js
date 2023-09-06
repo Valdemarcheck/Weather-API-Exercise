@@ -8,10 +8,6 @@ import JsonParser from "./jsonParser";
 import DataRenderer from "./dataRenderer";
 
 export default class App {
-  OBJECTS_TO_RENDER_INSIDE_OF = [
-    document.getElementById("current-forecast-div"),
-    document.getElementById("weekly-forecast-div"),
-  ];
   URL_TYPES = {
     current: "/current.json",
     forecast: "/forecast.json",
@@ -48,6 +44,11 @@ export default class App {
   };
 
   constructor() {
+    const objectsToRenderInsideOf = [
+      document.getElementById("current-forecast-div"),
+      document.getElementById("weekly-forecast-div"),
+    ];
+
     this.localStorageManager = new LocalStorageManager();
     this.textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
     this.inputGetter = new InputGetter();
@@ -55,7 +56,7 @@ export default class App {
     this.dataFetcher = new DataFetcher();
     this.errorNotifier = new ErrorNotifier();
     this.jsonParser = new JsonParser();
-    this.dataRenderer = new DataRenderer(this.OBJECTS_TO_RENDER_INSIDE_OF);
+    this.dataRenderer = new DataRenderer(objectsToRenderInsideOf);
   }
 
   async getDataOfURLType(inputValues, URLType) {
@@ -67,6 +68,13 @@ export default class App {
   }
 
   setup() {
+    const inputsForRenderingParameters = {
+      speed: document.getElementById("speed"),
+      temperature: document.getElementById("temperature"),
+      pressure: document.getElementById("pressure"),
+      precipitation: document.getElementById("precipitation"),
+    };
+
     const languageSelect = document.getElementById("language");
     const submitButton = document.querySelector("button[type='submit']");
     const weatherForm = document.getElementById("weather-form");
@@ -96,7 +104,14 @@ export default class App {
           inputValues,
           this.URL_TYPES.forecast
         );
-        console.log(currentWeatherData, forecastWeatherData);
+        const renderingParameters = this.inputGetter.getRenderingParameters(
+          inputsForRenderingParameters
+        );
+        console.log(
+          currentWeatherData,
+          forecastWeatherData,
+          renderingParameters
+        );
       }
     });
   }
