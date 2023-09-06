@@ -42,7 +42,23 @@ export default class App {
     },
   };
 
-  constructor() {}
+  constructor() {
+    this.localStorageManager = new LocalStorageManager();
+    this.textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
+    this.inputGetter = new InputGetter();
+    this.urlMaker = new URLMaker(this.URL_TYPES);
+    this.dataFetcher = new DataFetcher();
+    this.errorNotifier = new ErrorNotifier();
+    this.jsonParser = new JsonParser();
+  }
+
+  async getDataOfURLType(inputValues, URLType) {
+    const fetchURL = this.urlMaker.makeURL(inputValues, URLType);
+
+    const response = await this.dataFetcher.fetchData(fetchURL);
+    const data = await this.jsonParser.parseJson(response);
+    return data;
+  }
 
   setup() {
     const languageSelect = document.getElementById("language");
@@ -52,41 +68,32 @@ export default class App {
       document.getElementById("error-notification");
     const inputs = [languageSelect, document.getElementById("location")];
 
-    const localStorageManager = new LocalStorageManager();
-    const textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
-    const inputGetter = new InputGetter();
-    const urlMaker = new URLMaker();
-    const dataFetcher = new DataFetcher();
-    const errorNotifier = new ErrorNotifier();
-    const jsonParser = new JsonParser();
-
-    if (localStorageManager.getValue("language")) {
-      const language = localStorageManager.getValue("language");
-      textTranslator.translateText(language);
+    if (this.localStorageManager.getValue("language")) {
+      const language = this.localStorageManager.getValue("language");
+      this.textTranslator.translateText(language);
       languageSelect.value = language;
     }
 
     languageSelect.addEventListener("change", () => {
-      textTranslator.translateText(languageSelect.value);
-      localStorageManager.setValue("language", languageSelect.value);
+      this.textTranslator.translateText(languageSelect.value);
+      this.localStorageManager.setValue("language", languageSelect.value);
     });
 
     submitButton.addEventListener("click", async (e) => {
       if (weatherForm.checkValidity()) {
         e.preventDefault();
-        const inputValues = inputGetter.getURLInputValues(inputs);
+        const inputValues = this.inputGetter.getURLInputValues(inputs);
         console.log(inputValues);
 
-        const currentWeatherURL = urlMaker.makeURL(
+        const currentWeatherData = await this.getDataOfURLType(
           inputValues,
           this.URL_TYPES.current
         );
-        console.log(currentWeatherURL);
-
-        const response = await dataFetcher.fetchData(currentWeatherURL);
-        console.log(response);
-        const data = await jsonParser.parseJson(response);
-        console.log(data);
+        const forecastWeatherData = await this.getDataOfURLType(
+          inputValues,
+          this.URL_TYPES.forecast
+        );
+        console.log(currentWeatherData, forecastWeatherData);
       }
     });
   }

@@ -1,7 +1,7 @@
-// import KEY from "./key";
-
 export default class URLMaker {
-  constructor() {}
+  constructor(URLTypes) {
+    this.URLTypes = URLTypes;
+  }
 
   makeURL(inputValues, URLType) {
     const key = process.env.API_KEY;
@@ -12,6 +12,9 @@ export default class URLMaker {
     let URLParameters = `key=${key}&q=${location}`;
     if (language !== "en") {
       URLParameters += `&lang=${language}`;
+    }
+    if (URLType === this.URLTypes.forecast) {
+      URLParameters += "&days=7";
     }
 
     return URLPath + "?" + URLParameters;
