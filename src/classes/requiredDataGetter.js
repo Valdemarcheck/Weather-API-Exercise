@@ -95,6 +95,7 @@ export default class RequiredDataGetter {
     allData,
     renderingParameters,
     requiredDataObject,
+    dataKind,
   }) {
     requiredDataObject.pressure = allData.current[renderingParameters.pressure];
   }
@@ -103,6 +104,7 @@ export default class RequiredDataGetter {
     allData,
     renderingParameters,
     requiredDataObject,
+    dataKind,
   }) {
     requiredDataObject.precipitation =
       allData.current[renderingParameters.precipitation];
@@ -113,6 +115,7 @@ export default class RequiredDataGetter {
       const allDayData = allData.forecast.forecastday[i];
       const requiredDayData = {
         condition: allDayData.day.condition.text,
+        imageURL: allDayData.day.condition.icon,
       };
 
       this.#setTemperatureRelatedParams({

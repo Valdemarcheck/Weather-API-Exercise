@@ -4,7 +4,6 @@ export default class DataRenderer {
   }
 
   renderWeather(data) {
-    console.log(data);
     this.#renderCurrentWeather(data);
     this.#renderForecastWeather(data.forecastDays);
   }
@@ -67,6 +66,8 @@ export default class DataRenderer {
       maxTemperatureText.classList.add("max-temperature");
       maxTemperatureText.textContent = day.maxtemp;
       temperaturesSection.appendChild(maxTemperatureText);
+
+      this.#renderImage(weatherConditionImageDiv, day.imageURL);
     }
   }
 
@@ -84,5 +85,17 @@ export default class DataRenderer {
     rowDiv.appendChild(valueElement);
   }
 
-  #renderImage(data) {}
+  async #renderImage(elementToAppendTo, imageURL) {
+    const imageProcessedURL = await this.#getImage(imageURL);
+    const imageElement = document.createElement("img");
+    imageElement.src = imageProcessedURL;
+    elementToAppendTo.appendChild(imageElement);
+  }
+
+  async #getImage(imageURL) {
+    const response = await fetch(imageURL, { mode: "cors" });
+    const blob = await response.blob();
+    const image = URL.createObjectURL(blob);
+    return image;
+  }
 }

@@ -75,6 +75,10 @@ form {
   margin: 0 auto;
 }
 
+.condition-image img {
+  width: 100%;
+}
+
 .temperatures-section {
   aspect-ratio: 1/1;
   width: 100%;
