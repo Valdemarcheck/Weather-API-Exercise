@@ -8,22 +8,16 @@
 
 :root {
   font-size: 14px;
+  overflow-x: hidden;
 }
 
 body {
   width: 100vw;
   min-height: 100vh;
-  background: rgb(121, 153, 238); /* Fallback */
-  background: linear-gradient(
-    125deg,
-    rgba(121, 153, 238, 1) 0%,
-    rgb(151, 114, 236) 27%,
-    rgb(138, 194, 242) 100%
-  );
+  background: rgb(243, 246, 255);
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   gap: 10px;
 }
@@ -38,18 +32,114 @@ a {
 }
 
 form {
-  background: rgba(0, 0, 0, 0.422);
+  background-color: rgb(198, 198, 198);
+  padding: 5px;
+  width: 90%;
+}
+
+#current-forecast-div,
+#weekly-forecast-div {
+  background-color: rgb(198, 198, 198);
+  padding: 10px;
+  width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#day-cells-area {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(7, minmax(50px, 150px));
+  grid-template-rows: auto;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.day-cell {
+  background: rgb(64, 135, 209);
+  background: linear-gradient(
+    0deg,
+    rgba(64, 135, 209, 1) 0%,
+    rgba(183, 150, 255, 0.37) 100%
+  );
+  aspect-ratio: 2/3;
+  position: relative;
+}
+
+.condition-image {
+  aspect-ratio: 1/1;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.temperatures-section {
+  aspect-ratio: 1/1;
+  width: 100%;
+  font-size: 2rem;
+
+  position: relative;
+}
+
+.min-temperature {
+  position: absolute;
+  bottom: 20%;
+  right: 20%;
+}
+
+.max-temperature {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+}
+
+.temperature-separator {
+  background: black;
+  width: 2px;
+  height: 70%;
+
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: rotate(80deg);
+}
+
+.condition-text {
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.5rem;
+  margin: -10px 0;
+
+  position: relative;
+  z-index: 1;
+}
+
+.row {
+  width: 100%;
+  padding: 3px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header {
+  margin-top: 15px;
+  text-align: center;
 }
 
 footer {
   color: white;
   background-color: rgb(23, 23, 23);
-  justify-self: flex-end;
-  height: 100px;
+  margin-top: auto;
+  height: 80px;
 
   display: flex;
   align-items: center;
   padding-left: 10px;
+  margin-bottom: -10px;
 }
 
 #error-notification {
