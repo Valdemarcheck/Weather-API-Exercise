@@ -6,61 +6,62 @@ import DataFetcher from "./dataFetcher";
 import ErrorNotifier from "./errorNotifier";
 import JsonParser from "./jsonParser";
 import DataRenderer from "./dataRenderer";
+import RequiredDataGetter from "./requiredDataGetter";
 
+const URL_TYPES = {
+  current: "/current.json",
+  forecast: "/forecast.json",
+};
+const TEXT_TRANSLATIONS = {
+  "form#settings>.header": {
+    ru: "Настройки",
+    en: "Settings",
+  },
+  'label[for="language"]': {
+    ru: "Язык",
+    en: "Language",
+  },
+  'label[for="speed"]': {
+    ru: "Скорость",
+    en: "Speed",
+  },
+  'label[for="temperature"]': {
+    ru: "Температура",
+    en: "Temperature",
+  },
+  'label[for="pressure"]': {
+    ru: "Давление",
+    en: "Pressure",
+  },
+  'label[for="precipitation"]': {
+    ru: "Осадки",
+    en: "Precipitation",
+  },
+  'label[for="location"]': {
+    ru: "Город или страна",
+    en: "City or country",
+  },
+};
 export default class App {
-  URL_TYPES = {
-    current: "/current.json",
-    forecast: "/forecast.json",
-  };
-  TEXT_TRANSLATIONS = {
-    "form#settings>.header": {
-      ru: "Настройки",
-      en: "Settings",
-    },
-    'label[for="language"]': {
-      ru: "Язык",
-      en: "Language",
-    },
-    'label[for="speed"]': {
-      ru: "Скорость",
-      en: "Speed",
-    },
-    'label[for="temperature"]': {
-      ru: "Температура",
-      en: "Temperature",
-    },
-    'label[for="pressure"]': {
-      ru: "Давление",
-      en: "Pressure",
-    },
-    'label[for="precipitation"]': {
-      ru: "Осадки",
-      en: "Precipitation",
-    },
-    'label[for="location"]': {
-      ru: "Город или страна",
-      en: "City or country",
-    },
-  };
-
   constructor() {
-    const objectsToRenderInsideOf = [
-      document.getElementById("current-forecast-div"),
-      document.getElementById("weekly-forecast-div"),
-    ];
+    const objectsToRenderInsideOf = {
+      current: document.getElementById("current-forecast-div"),
+      forecast: document.getElementById("weekly-forecast-div"),
+    };
 
     this.localStorageManager = new LocalStorageManager();
-    this.textTranslator = new TextTranslator(this.TEXT_TRANSLATIONS, null);
+    this.textTranslator = new TextTranslator(TEXT_TRANSLATIONS, null);
     this.inputGetter = new InputGetter();
-    this.urlMaker = new URLMaker(this.URL_TYPES);
+    this.urlMaker = new URLMaker(URL_TYPES);
     this.dataFetcher = new DataFetcher();
     this.errorNotifier = new ErrorNotifier();
     this.jsonParser = new JsonParser();
     this.dataRenderer = new DataRenderer(objectsToRenderInsideOf);
+    this.requiredDataGetter = new RequiredDataGetter();
   }
 
-  async getDataOfURLType(inputValues, URLType) {
-    const fetchURL = this.urlMaker.makeURL(inputValues, URLType);
+  async getWeatherData(inputValues) {
+    const fetchURL = this.urlMaker.makeURL(inputValues);
 
     const response = await this.dataFetcher.fetchData(fetchURL);
     const data = await this.jsonParser.parseJson(response);
@@ -96,22 +97,20 @@ export default class App {
         e.preventDefault();
         const inputValues = this.inputGetter.getURLInputValues(inputs);
 
-        const currentWeatherData = await this.getDataOfURLType(
-          inputValues,
-          this.URL_TYPES.current
-        );
-        const forecastWeatherData = await this.getDataOfURLType(
-          inputValues,
-          this.URL_TYPES.forecast
-        );
+        const allWeatherData = await this.getWeatherData(inputValues);
         const renderingParameters = this.inputGetter.getRenderingParameters(
           inputsForRenderingParameters
         );
-        console.log(
-          currentWeatherData,
-          forecastWeatherData,
-          renderingParameters
-        );
+
+        const requiredData = this.requiredDataGetter.getRequiredWeatherData({
+          data: allWeatherData,
+          renderingParameters,
+        });
+
+        this.dataRenderer.renderWeather({
+          data: requiredData,
+          renderingParameters,
+        });
       }
     });
   }
